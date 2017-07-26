@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+	<body>
+		<h1></h1>
+
+		<script src="/node_modules/jquery/dist/jquery.js"></script>
+		<script>
+			var i = 0;
+			var interval = setInterval(function() {
+				$.get('/short-poll-data', function(data) {
+					$('h1').text(data);
+				});
+
+				if(++i >= 30) {
+					clearInterval(interval);
+				}
+			}, 250);
+		</script>
+	</body>
+</html>

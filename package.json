@@ -1,4 +1,12 @@
 {
-	"name": "real-time-methods",
-	"version": ""
+  "name": "real-time-methods",
+  "version": "0.0.0",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "kefir": "^3.7.3",
+    "primus": "^7.1.0",
+    "serve-static": "^1.12.3",
+    "sockjs": "^0.3.18",
+    "ws": "^3.0.0"
+  }
 }

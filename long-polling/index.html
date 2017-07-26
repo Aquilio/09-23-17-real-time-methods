@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+	<body>
+		<h1></h1>
+
+		<script src="/node_modules/jquery/dist/jquery.js"></script>
+		<script>
+			var i = 0;
+			var getData = function() {
+				$.get('/long-poll-data', function(data) {
+					$('h1').text(data);
+
+					if(++i < 5) {
+						getData();
+					}
+				});
+			};
+
+			getData();
+		</script>
+	</body>
+</html>

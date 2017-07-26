@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+	<body>
+		<h1></h1>
+
+		<script src="/node_modules/jquery/dist/jquery.js"></script>
+		<script src="/primus/primus.js"></script>
+		<script>
+			var primus = new Primus();
+			var i = 0;
+
+			primus.on('data', function(data) {
+				$('h1').text(data);
+
+				if(++i >= 5) {
+					primus.end();
+				}
+			});
+		</script>
+	</body>
+</html>
