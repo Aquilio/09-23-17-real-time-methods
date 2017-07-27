@@ -5,7 +5,7 @@ const serveStatic = require('serve-static');
 const kefir = require('kefir');
 const Primus = require('primus');
 
-const http = require('http');
+const https = require('https');
 
 const stream = kefir.fromPoll(1000, () => new Date().toString());
 
@@ -51,8 +51,7 @@ const options = {
 	ca: [ fs.readFileSync(`${process.env.HOME}/dev/ssl.crt`) ]
 };
 
-const serve = serveStatic(path.resolve(__dirname), { index: ['index.html'] });
-const server = http2.createSecureServer(options, (req, res) => {
+const server = (req, res) => {
 	serve(req, res, () => {
 		switch(req.url) {
 			case '/server-sent-data':
@@ -82,10 +81,15 @@ const server = http2.createSecureServer(options, (req, res) => {
 				break;
 		}
 	});
-});
+};
 
-const primus = new Primus(http.createServer((req, res) => serve(req, res, () => {})), { transformer: 'websockets' });
+const serve = serveStatic(path.resolve(__dirname), { index: ['index.html'] });
+
+const http2Server = http2.createSecureServer(options, server);
+const httpsServer = https.createServer(options, server);
+
+const primus = new Primus(httpsServer, { transformer: 'websockets' });
 primus.save(__dirname +'/primus.js');
 
-primus.server.listen(8000);
-server.listen(8443);
+httpsServer.listen(8000);
+http2Server.listen(8443);

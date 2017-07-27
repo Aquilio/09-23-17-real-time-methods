@@ -8,10 +8,15 @@
 			var i = 0;
 			var interval = setInterval(function() {
 				$.get('/short-poll-data', function(data) {
-					$('h1').text(data);
+					var text = $('h1').text();
+
+					if(data !== text) {
+						$('h1').text(data);
+						i++;
+					}
 				});
 
-				if(++i >= 30) {
+				if(i >= 10) {
 					clearInterval(interval);
 				}
 			}, 250);
