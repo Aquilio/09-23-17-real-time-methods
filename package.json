@@ -2,8 +2,8 @@
   "name": "real-time-methods",
   "version": "0.0.0",
   "dependencies": {
-    "engine.io": "^3.1.0",
     "browserchannel": "^2.1.0",
+    "engine.io": "^3.1.0",
     "kefir": "^3.7.3",
     "primus": "^7.1.0",
     "serve-static": "^1.12.3",
