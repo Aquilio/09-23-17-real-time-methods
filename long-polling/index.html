@@ -1,19 +1,40 @@
 <!doctype html>
 <html>
+	<head>
+		<title>Long Polling</title>
+	</head>
 	<body>
 		<h1></h1>
-
-		<script src="/node_modules/jquery/dist/jquery.js"></script>
 		<script>
+			if(window.location.port === '8443') {
+				document.title = 'HTTP/2 - Long Polling';
+			} else {
+				document.title = 'HTTP/1.1 - Long Polling';
+			}
 			var i = 0;
+			var request = new XMLHttpRequest();
 			var getData = function() {
-				$.get('/long-poll-data', function(data) {
-					$('h1').text(data);
+				var request = new XMLHttpRequest();
+				request.open('GET', '/long-poll-data', true);
 
-					if(++i < 5) {
-						getData();
+				request.onload = function() {
+					if (request.status >= 200 && request.status < 400) {					
+						var resp = request.responseText;
+						document.querySelector('h1').innerHTML = resp;
+
+						if(++i < 5) {
+							getData();
+						}
+					} else {
+						console.error('Error occurred', request);
 					}
-				});
+				};
+
+				request.onerror = function() {
+					console.error('Error occurred', request);
+				};
+
+				request.send();
 			};
 
 			getData();

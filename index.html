@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Real Time Methods</title>
+	</head>
+	<body>
+        <h1>Real Time Methods</h1>
+        <ul></ul>
+        <script>
+            var list = document.querySelector('ul');
+            var host = window.location.hostname;
+            function createLink(path, text, port) {
+                var li = document.createElement('li');
+                var link = document.createElement('a');
+                link.href = 'https://' + host + ':' + port + '/' + path;
+                link.textContent = text;
+                li.appendChild(link);
+                return li;
+            }
+            list.appendChild(createLink('long-polling', 'HTTP/1.1 - Long Polling', 8000));
+            list.appendChild(createLink('long-polling', 'HTTP/2 - Long Polling', 8443));
+            list.appendChild(createLink('short-polling', 'HTTP/1.1 - Short Polling', 8000));
+            list.appendChild(createLink('short-polling', 'HTTP/2 - Short Polling', 8443));
+            list.appendChild(createLink('server-sent-events', 'HTTP/1.1 - Server Sent Events', 8000));
+            list.appendChild(createLink('server-sent-events', 'HTTP/2 - Server Sent Events', 8443));
+            list.appendChild(createLink('browserchannel', 'Primus - BrowserChannel', 8000));
+            list.appendChild(createLink('engine.io', 'Primus - Engine.io', 8001));
+            list.appendChild(createLink('faye', 'Primus - Faye', 8002));
+            list.appendChild(createLink('sockjs', 'Primus - SockJS', 8003));
+            // list.appendChild(createLink('uws', 'Primus - uws', 8004));
+            list.appendChild(createLink('websockets', 'Primus - WebSockets', 8005));
+        </script>
+	</body>
+</html>

@@ -1,20 +1,41 @@
 <!doctype html>
 <html>
+	<head>
+		<title>Short Polling</title>
+	</head>
 	<body>
 		<h1></h1>
-
-		<script src="/node_modules/jquery/dist/jquery.js"></script>
 		<script>
+			if(window.location.port === '8443') {
+				document.title = 'HTTP/2 - Short Polling';
+			} else {
+				document.title = 'HTTP/1.1 - Short Polling';
+			}
 			var i = 0;
 			var interval = setInterval(function() {
-				$.get('/short-poll-data', function(data) {
-					var text = $('h1').text();
+				var request = new XMLHttpRequest();
+				request.open('GET', '/short-poll-data', true);
 
-					if(data !== text) {
-						$('h1').text(data);
-						i++;
+				request.onload = function() {
+					if (request.status >= 200 && request.status < 400) {					
+						var resp = request.responseText;
+						var h1 = document.querySelector('h1');
+						var text = h1.innerHTML;
+
+						if(resp !== text) {
+							h1.innerHTML = resp;
+							i++;
+						}
+					} else {
+						console.error('Error occurred', request);
 					}
-				});
+				};
+
+				request.onerror = function() {
+					console.error('Error occurred', request);
+				};
+
+				request.send();
 
 				if(i >= 5) {
 					clearInterval(interval);

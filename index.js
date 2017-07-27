@@ -2,12 +2,14 @@ const path = require('path');
 const http2 = require('http2');
 const fs = require('fs');
 const serveStatic = require('serve-static');
+const createPrimusServer = require('./src/primus');
+const createStream = require('./src/stream');
 const kefir = require('kefir');
 const Primus = require('primus');
 
 const https = require('https');
 
-const stream = kefir.fromPoll(1000, () => new Date().toString());
+const stream = createStream();
 
 let shortPollValue;
 const shortPoll = stream.observe({
@@ -39,17 +41,13 @@ const sse = stream.observe({
 	}
 });
 
-const ws = stream.observe({
-	value(val) {
-		primus.write(val);
-	}
-});
-
 const options = {
 	key: fs.readFileSync(`${process.env.HOME}/dev/ssl.key`),
 	cert: fs.readFileSync(`${process.env.HOME}/dev/ssl.crt`),
 	ca: [ fs.readFileSync(`${process.env.HOME}/dev/ssl.crt`) ]
 };
+
+const serve = serveStatic(path.resolve(__dirname), { index: ['index.html'] });
 
 const server = (req, res) => {
 	serve(req, res, () => {
@@ -83,13 +81,13 @@ const server = (req, res) => {
 	});
 };
 
-const serve = serveStatic(path.resolve(__dirname), { index: ['index.html'] });
-
 const http2Server = http2.createSecureServer(options, server);
-const httpsServer = https.createServer(options, server);
 
-const primus = new Primus(httpsServer, { transformer: 'engine.io' });
-primus.save(__dirname +'/primus.js');
+createPrimusServer(stream, options, server, 'browserchannel', 8000);
+createPrimusServer(stream, options, server, 'engine.io', 8001);
+createPrimusServer(stream, options, server, 'faye', 8002);
+createPrimusServer(stream, options, server, 'sockjs', 8003);
+// createPrimusServer(stream, options, server, 'uws', 8004); //https://github.com/uNetworking/uWebSockets/issues/663
+createPrimusServer(stream, options, server, 'websockets', 8005);
 
-httpsServer.listen(8000);
 http2Server.listen(8443);

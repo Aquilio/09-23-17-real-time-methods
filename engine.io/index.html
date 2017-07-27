@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Primus - Engine.io</title>
+	</head>
+	<body>
+		<h1></h1>
+		<script src="primus.js"></script>
+		<script>
+			var primus = new Primus();
+			var i = 0;
+
+			primus.on('data', function(data) {
+				document.querySelector('h1').innerHTML = data;
+
+				if(++i >= 5) {
+					primus.end();
+				}
+			});
+		</script>
+	</body>
+</html>
