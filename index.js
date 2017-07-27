@@ -88,7 +88,7 @@ const serve = serveStatic(path.resolve(__dirname), { index: ['index.html'] });
 const http2Server = http2.createSecureServer(options, server);
 const httpsServer = https.createServer(options, server);
 
-const primus = new Primus(httpsServer, { transformer: 'websockets' });
+const primus = new Primus(httpsServer, { transformer: 'engine.io' });
 primus.save(__dirname +'/primus.js');
 
 httpsServer.listen(8000);
