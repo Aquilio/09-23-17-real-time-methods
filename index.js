@@ -83,11 +83,10 @@ const server = (req, res) => {
 
 const http2Server = http2.createSecureServer(options, server);
 
-createPrimusServer(stream, options, server, 'browserchannel', 8000);
+createPrimusServer(null, options, server, null, 8000);
 createPrimusServer(stream, options, server, 'engine.io', 8001);
 createPrimusServer(stream, options, server, 'faye', 8002);
 createPrimusServer(stream, options, server, 'sockjs', 8003);
-// createPrimusServer(stream, options, server, 'uws', 8004); //https://github.com/uNetworking/uWebSockets/issues/663
 createPrimusServer(stream, options, server, 'websockets', 8005);
 
 http2Server.listen(8443);

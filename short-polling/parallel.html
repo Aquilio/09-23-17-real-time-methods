@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Short-polling</title>
+	</head>
+	<body>
+		<h1 id="subscriber-a"></h1>
+		<h1 id="subscriber-b"></h1>
+
+		<script>
+			if(window.location.port === '8443') {
+				document.title = 'HTTP/2 - Short Polling';
+			} else {
+				document.title = 'HTTP/1.1 - Short Polling';
+			}
+
+			var getData = function(selector) {
+				var i = 0;
+
+				return function() {
+					var request = new XMLHttpRequest();
+					request.open('GET', '/short-poll-data', true);
+
+					request.onload = function() {
+						if (request.status >= 200 && request.status < 400) {
+							var resp = request.responseText;
+							var h1 = document.querySelector(selector);
+							var text = h1.innerHTML;
+
+							if(resp !== text) {
+								h1.innerHTML = resp;
+								i++;
+							}
+						} else {
+							console.error('Error occurred', request);
+						}
+					};
+
+					request.onerror = function() {
+						console.error('Error occurred', request);
+					};
+
+					request.send();
+
+					if(i >= 5) {
+						clearInterval(intervals[selector]);
+					}
+				};
+			};
+
+			var intervals = {};
+			intervals['#subscriber-a'] = setInterval(getData('#subscriber-a'), 250);
+			intervals['#subscriber-b'] = setInterval(getData('#subscriber-b'), 250);
+		</script>
+	</body>
+</html>

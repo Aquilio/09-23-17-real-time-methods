@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 	<head>
-		<title>Short Polling</title>
+		<title>Short-polling</title>
 	</head>
 	<body>
 		<h1></h1>
@@ -17,7 +17,7 @@
 				request.open('GET', '/short-poll-data', true);
 
 				request.onload = function() {
-					if (request.status >= 200 && request.status < 400) {					
+					if (request.status >= 200 && request.status < 400) {
 						var resp = request.responseText;
 						var h1 = document.querySelector('h1');
 						var text = h1.innerHTML;

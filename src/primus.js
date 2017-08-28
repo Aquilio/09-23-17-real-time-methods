@@ -3,16 +3,19 @@ const kefir = require('kefir');
 const Primus = require('primus');
 
 module.exports = function(stream, options, server, transformer, port) {
+	const httpsServer = https.createServer(options, server);
 
-    const httpsServer = https.createServer(options, server);
-    const primus = new Primus(httpsServer, { transformer });
+	if(transformer) {
+		const primus = new Primus(httpsServer, { transformer });
 
-    stream.observe({
-        value(val) {
-            primus.write(val);
-        }
-    });
+		stream.observe({
+			value(val) {
+				primus.write(val);
+			}
+		});
 
-    primus.save(__dirname + `/../${transformer}/primus.js`);
-    httpsServer.listen(port);
+		primus.save(__dirname + `/../${transformer}/primus.js`);
+	}
+
+	httpsServer.listen(port);
 }

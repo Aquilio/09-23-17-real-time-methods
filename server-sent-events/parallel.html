@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Server-sent events</title>
+	</head>
+	<body>
+		<h1 id="subscriber-a"></h1>
+		<h1 id="subscriber-b"></h1>
+
+		<script>
+			var subscriberA = new EventSource('/server-sent-data');
+			var i = 0;
+			subscriberA.onmessage = function(ev) {
+				document.querySelector('#subscriber-a').innerHTML = ev.data;
+
+				if(++i >= 5) {
+					subscriberA.close();
+				}
+			};
+
+			var subscriberB = new EventSource('/server-sent-data');
+			var j = 0;
+			subscriberB.onmessage = function(ev) {
+				document.querySelector('#subscriber-b').innerHTML = ev.data;
+
+				if(++j >= 5) {
+					subscriberB.close();
+				}
+			};
+		</script>
+	</body>
+</html>

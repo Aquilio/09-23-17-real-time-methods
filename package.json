@@ -1,6 +1,12 @@
 {
   "name": "real-time-methods",
   "version": "0.0.0",
+  "engines": {
+    "node": "^8.4.0"
+  },
+  "scripts": {
+    "start": "node --expose-http2 ."
+  },
   "dependencies": {
     "browserchannel": "^2.1.0",
     "engine.io": "^3.1.0",
@@ -8,7 +14,6 @@
     "primus": "^7.1.0",
     "serve-static": "^1.12.3",
     "sockjs": "^0.3.18",
-    "uws": "^8.14.0",
     "ws": "^3.0.0"
   }
 }

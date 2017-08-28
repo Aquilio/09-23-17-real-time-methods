@@ -1,14 +1,16 @@
 <!doctype html>
 <html>
+	<head>
+		<title>Server-sent events</title>
+	</head>
 	<body>
 		<h1></h1>
 
-		<script src="/node_modules/jquery/dist/jquery.js"></script>
 		<script>
 			var source = new EventSource('/server-sent-data');
 			var i = 0;
 			source.onmessage = function(ev) {
-				$('h1').text(ev.data);
+				document.querySelector('h1').innerHTML = ev.data;
 
 				if(++i >= 5) {
 					source.close();

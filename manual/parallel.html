@@ -1,27 +1,23 @@
 <!doctype html>
 <html>
+	<head>
+		<title>Manual refresh</title>
+	</head>
 	<body>
-		<h1></h1>
+		<h1 id="data-a"></h1>
+		<h1 id="data-b"></h1>
+
 		<script>
-			if(window.location.port === '8443') {
-				document.title = 'HTTP/2 - Long-polling';
-			} else {
-				document.title = 'HTTP/1.1 - Long-polling';
-			}
-			var i = 0;
 			var request = new XMLHttpRequest();
-			var getData = function() {
+
+			var getData = function(selector) {
 				var request = new XMLHttpRequest();
-				request.open('GET', '/long-poll-data', true);
+				request.open('GET', '/short-poll-data', true);
 
 				request.onload = function() {
 					if (request.status >= 200 && request.status < 400) {
 						var resp = request.responseText;
-						document.querySelector('h1').innerHTML = resp;
-
-						if(++i < 5) {
-							getData();
-						}
+						document.querySelector(selector).innerHTML = resp;
 					} else {
 						console.error('Error occurred', request);
 					}
@@ -34,7 +30,8 @@
 				request.send();
 			};
 
-			getData();
+			getData('#data-a');
+			getData('#data-b');
 		</script>
 	</body>
 </html>
